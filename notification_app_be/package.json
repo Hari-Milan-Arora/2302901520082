@@ -1,0 +1,14 @@
+{
+  "name": "notification-app-be",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "logging-middleware": "file:../logging_middleware"
+  },
+  "scripts": {
+    "build": "node --check src/server.js && node --check src/app.js && node --check src/controllers/notification.controller.js && node --check src/middlewares/logging.middleware.js && node --check src/routes/health.route.js && node --check src/services/notification.service.js",
+    "dev": "node --env-file=.env src/server.js",
+    "start": "node --env-file=.env src/server.js"
+  }
+}
