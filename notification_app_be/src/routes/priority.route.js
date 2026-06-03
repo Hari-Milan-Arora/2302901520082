@@ -6,15 +6,17 @@ export async function priorityRoute(request, response) {
   }
 
   const url = new URL(request.url, "http://localhost");
-  const topN = Number(url.searchParams.get("limit") ?? 10);
+  const topN = Number(url.searchParams.get("limit") ?? url.searchParams.get("top_n") ?? 10);
+  const pageSize = Number(url.searchParams.get("page_size") ?? 100);
   const notificationType = url.searchParams.get("notification_type") ?? undefined;
 
-  const notifications = await getPriorityNotifications({
+  const result = await getPriorityNotifications({
     topN: Number.isFinite(topN) && topN > 0 ? topN : 10,
+    pageSize: Number.isFinite(pageSize) && pageSize > 0 ? pageSize : 100,
     notificationType,
   });
 
   response.writeHead(200, { "Content-Type": "application/json" });
-  response.end(JSON.stringify({ notifications }));
+  response.end(JSON.stringify(result));
   return true;
 }

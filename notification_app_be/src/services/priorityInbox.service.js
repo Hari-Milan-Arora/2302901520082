@@ -12,10 +12,11 @@ export async function getPriorityNotifications({
   notificationType,
   authHeader,
   apiUrl = process.env.NOTIFICATION_API_URL ?? DEFAULT_NOTIFICATION_API_URL,
-} = {}) {
+  } = {}) {
   const heap = new MinHeap(comparePriority);
   let page = 1;
   let hasMore = true;
+  let scannedCount = 0;
 
   while (hasMore) {
     const pageData = await fetchNotificationsPage({
@@ -33,6 +34,7 @@ export async function getPriorityNotifications({
     }
 
     for (const notification of notifications) {
+      scannedCount += 1;
       heap.push(normalizeNotification(notification));
       if (heap.size() > topN) {
         heap.pop();
@@ -46,7 +48,16 @@ export async function getPriorityNotifications({
     }
   }
 
-  return heap.toArraySortedDescending();
+  const notifications = heap.toArraySortedDescending();
+  return {
+    notifications,
+    meta: {
+      topN,
+      pageSize,
+      scannedCount,
+      returnedCount: notifications.length,
+    },
+  };
 }
 
 async function fetchNotificationsPage({ apiUrl, page, limit, notificationType, authHeader }) {
