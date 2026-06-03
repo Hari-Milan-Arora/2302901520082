@@ -344,3 +344,40 @@ score = typeWeight * 1_000_000_000_000 + unixTimestamp
 ```
 
 That keeps type priority higher than recency while still ordering newer items first within the same type.
+
+# Stage 7
+
+## Frontend Implementation
+
+Build the frontend as a React/Next.js application with Material UI so the notification dashboard is responsive, polished, and easy to extend.
+
+### Pages
+
+- `/`
+  - Shows the complete notification feed.
+  - Includes filters and unread counts.
+
+- `/priority`
+  - Shows the focused priority inbox.
+  - Highlights the top unread notifications first.
+
+### UI Structure
+
+- Use a shared app shell and a sticky header for navigation.
+- Keep the dashboard split into:
+  - a main notifications panel
+  - a priority inbox panel
+- Show loading, error, and empty states explicitly.
+
+### Data Flow
+
+- Fetch all notifications from the backend proxy route.
+- Fetch priority notifications from the dedicated priority route.
+- Render summary metadata for the priority scan so the user can see how the top list was computed.
+
+### Implementation Notes
+
+- Use Material UI components for cards, tabs, alerts, chips, and layout.
+- Keep the design clean and mobile-friendly.
+- Avoid hard-coding notification samples in the UI.
+- Let the backend remain the source of truth for notification ordering and filtering.

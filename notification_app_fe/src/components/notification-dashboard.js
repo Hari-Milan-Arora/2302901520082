@@ -24,6 +24,7 @@ export function NotificationDashboard({ mode = "all" }) {
   const [error, setError] = useState("");
   const [allItems, setAllItems] = useState([]);
   const [priorityItems, setPriorityItems] = useState([]);
+  const [priorityMeta, setPriorityMeta] = useState(null);
 
   const activeType = type === "All" ? undefined : type;
 
@@ -39,6 +40,7 @@ export function NotificationDashboard({ mode = "all" }) {
 
       setAllItems(extractItems(allResponse));
       setPriorityItems(extractItems(priorityResponse));
+      setPriorityMeta(priorityResponse?.meta ?? null);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Unable to load notifications");
     } finally {
@@ -81,6 +83,19 @@ export function NotificationDashboard({ mode = "all" }) {
               highest-priority unread items first, and distinguishing new updates from already viewed
               messages.
             </Typography>
+            {priorityMeta ? (
+              <Stack direction="row" spacing={1} sx={{ mt: 2, flexWrap: "wrap" }}>
+                <Typography variant="caption" color="text.secondary">
+                  Priority scan: {priorityMeta.scannedCount} items
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Returned: {priorityMeta.returnedCount}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Top N: {priorityMeta.topN}
+                </Typography>
+              </Stack>
+            ) : null}
           </Box>
 
           <NotificationFilters value={type} onChange={setType} onRefresh={loadData} />
