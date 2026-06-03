@@ -1,0 +1,14 @@
+{
+  "name": "affordmed-notification-workspace",
+  "private": true,
+  "workspaces": [
+    "logging_middleware",
+    "notification_app_be",
+    "notification_app_fe"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev:be": "npm run dev --workspace notification_app_be",
+    "dev:fe": "npm run dev --workspace notification_app_fe"
+  }
+}
